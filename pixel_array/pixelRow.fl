@@ -1,0 +1,6 @@
+
+../pixelSensor.sv
+../decoder/decoder.sv
+../mux/mux.v
+pixelRow.sv
+pixelRow_tb.sv
