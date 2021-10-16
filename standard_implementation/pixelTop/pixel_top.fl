@@ -1,0 +1,8 @@
+
+../dataPath/data_path.sv
+../decoder/decoder.sv
+../counters/gray_counter.sv
+../pixelSensor/pixelSensor.v
+../pixelArray/pixelArray.sv
+pixel_top.sv
+pixel_top_tb.sv

@@ -6,7 +6,7 @@ module PIXEL_ROW
         input logic enable,
         input logic ERASE,
         input logic EXPOSE,
-        input logic[width-1:0] decoder_select,
+        input logic[width:0] decoder_select,
         output logic[resolution-1:0] adc_output,
         output logic done
     );

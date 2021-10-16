@@ -6,7 +6,7 @@ module PIXEL_ARRAY
     input logic enable,
     input logic ERASE,
     input logic EXPOSE,
-    input logic[width-1:0] decoder_select,
+    input logic[width:0] decoder_select,
     output logic row_done
     );
     parameter rows = 3;

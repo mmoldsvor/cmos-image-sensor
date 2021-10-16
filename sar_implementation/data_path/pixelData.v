@@ -7,7 +7,7 @@ module PIXEL_DATA
         output logic erase,
         output logic expose,
         output logic adc_enable,
-        output logic[width-1:0] decoder_select
+        output logic[width:0] decoder_select
     );
     parameter columns = 2;
     parameter rows = 2;
@@ -34,7 +34,7 @@ module PIXEL_DATA
                 IDLE: begin
                     erase <= 0;
                     expose <= 0;
-                    decoder_select <= row_count;
+                    decoder_select <= 1;
                     state <= ERASE;
                 end
                 ERASE: begin
@@ -62,7 +62,7 @@ module PIXEL_DATA
                 NEXT: begin
                     row_count = row_count + 1;
                     decoder_select <= row_count;
-                    if (row_count >= rows) begin
+                    if (row_count > rows) begin
                         state <= DONE;
                     end
                     else begin

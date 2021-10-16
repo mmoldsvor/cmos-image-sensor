@@ -8,8 +8,8 @@ module DECODER
     parameter width = 8;
 
     always @(posedge clk) begin
-        if (enable && in) begin
-            out <= 1 << in;
+        if (enable && (in > 0)) begin
+            out <= 1 << (in - 1);
         end
         else
             out <= 0;
