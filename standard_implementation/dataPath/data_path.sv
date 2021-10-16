@@ -11,12 +11,12 @@ module data_path (input logic clk,
     parameter c_erase = 5;
     parameter c_expose = 255;
     parameter c_convert = 255;
-    parameter c_read = 5;
+    parameter c_read = 4;
 
     typedef enum {IDLE, ERASE, EXPOSE, CONVERT, READ} states;
     states state;
     states next_state;
-    logic[8-1:0] counter = 0;
+    logic[7:0] counter = 0;
 
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
@@ -28,9 +28,14 @@ module data_path (input logic clk,
             read <= 0;
             pixel_select <= 0;
         end else begin
+            if (state != next_state) begin        
+                counter <= 0;
+            end else begin
+                counter <= counter + 1;
+            end
+
             state <= next_state;
         end
-        counter <= counter + 1;
     end
 
     always_comb begin
@@ -46,9 +51,8 @@ module data_path (input logic clk,
                 expose = 0;
                 convert = 0;
                 read = 0;
-                if (counter == c_erase) begin
+                if (counter == c_erase-1) begin
                     next_state = EXPOSE;
-                    counter = 0;
                 end
             end
             EXPOSE: begin
@@ -56,9 +60,8 @@ module data_path (input logic clk,
                 expose = 1;
                 convert = 0;
                 read = 0;
-                if (counter == c_expose) begin
+                if (counter == c_expose-1) begin
                     next_state = CONVERT;
-                    counter = 0;
                 end
             end
             CONVERT: begin
@@ -66,9 +69,8 @@ module data_path (input logic clk,
                 expose = 0;
                 convert = 1;
                 read = 0;
-                if (counter == c_convert) begin
+                if (counter == c_convert-1) begin
                     next_state = READ;
-                    counter = 0;
                 end
             end
             READ: begin
@@ -76,15 +78,14 @@ module data_path (input logic clk,
                 expose = 0;
                 convert = 0;
                 read = 1;
-                pixel_select = counter;
-                if (counter == c_read) begin
+                if (counter == c_read-1) begin
                     next_state = IDLE;
-                    counter = 0;
                 end
             end
             default: begin
                 next_state = IDLE;
             end
         endcase
+        pixel_select = read ? counter : 0;
     end
 endmodule
