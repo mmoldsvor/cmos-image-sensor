@@ -11,12 +11,18 @@ module pixel_array(input logic clk,
 
     parameter counter_width = 8; 
 
-    wire[counter_width-1:0] data; 
     logic[pixel_count-1:0] pixel_read;
 
-    gray_counter #(.width(counter_width)) gc1(.clk(convert_clk), .reset(reset), .enable(!read), .out(data));
-    decoder #(.width(pixel_count)) d1(.clk(clk), .reset(reset), .enable(read), .select(pixel_select), .out(pixel_read));
+    logic[counter_width-1:0] counter;
+    logic[counter_width-1:0] gray_counter;
+
+    wire[counter_width-1:0] data; 
+
+    counter #(.width(counter_width)) gc1(.clk(convert_clk), .reset(reset), .out(counter));
+    gray_encoder #(.width(counter_width)) ge1(.in(counter), .out(gray_counter));
     
+    decoder #(.width(pixel_count)) d1(.enable(read), .select(pixel_select), .out(pixel_read));
+
     logic expose_clk;
     logic convert_clk;
 
@@ -31,4 +37,6 @@ module pixel_array(input logic clk,
         expose_clk = clk & expose;
         convert_clk = clk & convert;
     end
+
+    assign data = !read ? gray_counter : 'z;
 endmodule
