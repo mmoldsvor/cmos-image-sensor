@@ -1,6 +1,7 @@
 module data_path (input logic clk,
                   input logic reset,
                   output logic erase,
+                  output logic corr,
                   output logic expose,
                   output logic convert,
                   output logic read,
@@ -13,7 +14,7 @@ module data_path (input logic clk,
     parameter c_convert = 255;
     parameter c_read = 4;
 
-    typedef enum {IDLE, ERASE, EXPOSE, CONVERT, READ} states;
+    typedef enum {IDLE, ERASE, ERASE_CORR, CORR, EXPOSE, CONVERT, READ} states;
     states state;
     states next_state;
     logic[7:0] counter = 0;
@@ -23,6 +24,7 @@ module data_path (input logic clk,
             state <= IDLE;
             next_state <= ERASE;
             erase <= 0;
+            corr <= 0;
             expose <= 0;
             counter <= 0;
             read <= 0;
@@ -42,12 +44,34 @@ module data_path (input logic clk,
         case (state)
             IDLE: begin
                 erase = 0;
+                corr = 0;
                 expose = 0;
                 convert = 0;
                 read = 0;
             end
             ERASE: begin
                 erase = 1;
+                corr = 0;
+                expose = 0;
+                convert = 0;
+                read = 0;
+                if (counter == c_erase-1) begin
+                    next_state = CORR;
+                end
+            end
+            CORR: begin
+                erase = 0;
+                corr = 1;
+                expose = 0;
+                convert = 1;
+                read = 0;
+                if (counter == c_convert-1) begin
+                    next_state = ERASE_CORR;
+                end
+            end
+            ERASE_CORR: begin
+                erase = 1;
+                corr = 0;
                 expose = 0;
                 convert = 0;
                 read = 0;
@@ -57,6 +81,7 @@ module data_path (input logic clk,
             end
             EXPOSE: begin
                 erase = 0;
+                corr = 0;
                 expose = 1;
                 convert = 0;
                 read = 0;
@@ -66,6 +91,7 @@ module data_path (input logic clk,
             end
             CONVERT: begin
                 erase = 0;
+                corr = 0;
                 expose = 0;
                 convert = 1;
                 read = 0;
@@ -75,6 +101,7 @@ module data_path (input logic clk,
             end
             READ: begin
                 erase = 0;
+                corr = 0;
                 expose = 0;
                 convert = 0;
                 read = 1;

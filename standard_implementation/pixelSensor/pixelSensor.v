@@ -38,6 +38,7 @@ module PIXEL_SENSOR
    input logic      VBN1,
    input logic      RAMP,
    input logic      RESET,
+   input logic      CORR,
    input logic      ERASE,
    input logic      EXPOSE,
    input logic      READ,
@@ -53,6 +54,13 @@ module PIXEL_SENSOR
    real             adc;
 
    logic [7:0]      p_data;
+   logic [7:0]      p_data_corr;
+
+   logic [7:0]      p_data_b;
+   logic [7:0]      p_data_corr_b;
+
+    gray_decoder #(.width(8)) gd(.in(p_data), .out(p_data_b));
+    gray_decoder #(.width(8)) gd_corr(.in(p_data_corr), .out(p_data_corr_b));
 
    //----------------------------------------------------------------
    // ERASE
@@ -61,6 +69,7 @@ module PIXEL_SENSOR
    always @(ERASE) begin
       tmp = v_erase;
       p_data = 0;
+      p_data_corr = 0;
       cmp  = 0;
       adc = 0;
    end
@@ -89,16 +98,19 @@ module PIXEL_SENSOR
    // Memory latch
    //----------------------------------------------------------------
    always_comb  begin
-      if(!cmp) begin
-         p_data = DATA;
-      end
-
+        if(!cmp) begin
+            if (CORR) begin
+                p_data_corr = DATA;
+            end else begin
+                p_data = DATA;
+            end
+        end
    end
 
    //----------------------------------------------------------------
    // Readout
    //----------------------------------------------------------------
    // Assign data to bus when pixRead = 0
-   assign DATA = READ ? p_data : 8'bZ;
+   assign DATA = READ ? (p_data_corr_b - p_data_b) : 8'bZ;
 
 endmodule // re_control
