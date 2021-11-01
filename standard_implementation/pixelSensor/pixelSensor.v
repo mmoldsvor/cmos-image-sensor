@@ -41,7 +41,8 @@ module PIXEL_SENSOR
    input logic      ERASE,
    input logic      EXPOSE,
    input logic      READ,
-   inout [7:0]      DATA
+   inout [7:0]      DATA,
+   input logic[7:0]      pixel_value
    );
 
    real             v_erase = 1.2;
@@ -70,8 +71,10 @@ module PIXEL_SENSOR
    //----------------------------------------------------------------
    // Use bias to provide a clock for integration when exposing
    always @(posedge VBN1) begin
-      if(EXPOSE)
-        tmp = tmp - dv_pixel*lsb;
+      if(EXPOSE) begin
+        tmp = tmp - (pixel_value/255.0)*lsb;
+        //display("pixel_division: %f, target: %d", (pixel_value/255.0), pixel_value);
+      end
    end
 
    //----------------------------------------------------------------
@@ -92,7 +95,6 @@ module PIXEL_SENSOR
       if(!cmp) begin
          p_data = DATA;
       end
-
    end
 
    //----------------------------------------------------------------

@@ -11,12 +11,12 @@ module data_path (input logic clk,
     parameter c_erase = 5;
     parameter c_expose = 255;
     parameter c_convert = 255;
-    parameter c_read = 4;
+    parameter c_read = pixel_count;
 
     typedef enum {IDLE, ERASE, EXPOSE, CONVERT, READ} states;
     states state;
     states next_state;
-    logic[7:0] counter = 0;
+    logic[15:0] counter = 0;
 
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin

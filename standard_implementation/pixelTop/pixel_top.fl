@@ -3,6 +3,7 @@
 ../decoder/decoder.sv
 ../counters/counter.sv
 ../gray_code/gray_encoder.sv
+../gray_code/gray_decoder.sv
 ../pixelSensor/pixelSensor.v
 ../pixelArray/pixelArray.sv
 pixel_top.sv
