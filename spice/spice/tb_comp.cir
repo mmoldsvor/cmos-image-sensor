@@ -1,0 +1,41 @@
+*----------------------------------------------------------------
+* Include
+*----------------------------------------------------------------
+.include ../../../ciceda/models/ptm_130_ngspice.spi
+.include ../../../ciceda/lib/SUN_TR_GF130N.spi
+.include ../../../ciceda/lib/SUN_TRIO_GF130N.spi
+
+*----------------------------------------------------------------
+* Options
+*----------------------------------------------------------------
+.option TNOM=27 GMIN=1e-15 reltol=1e-6 abstol=1e-6
+
+*----------------------------------------------------------------
+* Sources
+*----------------------------------------------------------------
+VDD VDD VSS dc 1.5
+V1 VSTORE VSS dc 0.75 
+VSS VSS 0 dc 0
+V2 VRAMP VSS PULSE(0, 1.5, 0, 60u, 10n, 60u, 120u, 0) dc 0
+
+IPB1 VDD VBIAS dc 1u
+XMNB0 VBIAS VBIAS VSS VSS NCHCM2
+
+*----------------------------------------------------------------
+* DUT
+*----------------------------------------------------------------
+.include comp.cir
+XDUT VCMP_OUT VSTORE VRAMP VBIAS VDD VSS COMP
+
+*----------------------------------------------------------------
+* NGSPICE control
+*----------------------------------------------------------------
+
+.control
+set color0=white
+set color1=black
+tran 1n 60u
+plot V(VSTORE) V(VRAMP) V(VCMP_OUT)
+wrdata tb_comp.csv V(VSTORE) V(VRAMP) V(VCMP_OUT)
+.endc
+.end

@@ -1,0 +1,48 @@
+*----------------------------------------------------------------
+* Include
+*----------------------------------------------------------------
+.include ../../../ciceda/models/ptm_130_ngspice.spi
+.include ../../../ciceda/lib/SUN_TR_GF130N.spi
+.include ../../../ciceda/lib/SUN_TRIO_GF130N.spi
+
+*----------------------------------------------------------------
+* Options
+*----------------------------------------------------------------
+.option TNOM=27 GMIN=1e-15 reltol=1e-6 abstol=1e-6
+
+*----------------------------------------------------------------
+* Sources
+*----------------------------------------------------------------
+VDD VDD VSS dc 1.5
+VSS VSS 0 dc 0
+V1 VDATA1 VSS PULSE(0, 1.5, 5u, 1n, 1n, 5u, 10u, 0) dc 0
+V2 VDATA2 VSS PULSE(0, 1.5, 10u, 1n, 1n, 10u, 20u, 0) dc 0
+V3 VDATA3 VSS PULSE(0, 1.5, 20u, 1n, 1n, 20u, 40u, 0) dc 0
+V4 VDATA4 VSS PULSE(0, 1.5, 40u, 1n, 1n, 40u, 80u, 0) dc 0
+V5 VDATA5 VSS PULSE(0, 1.5, 80u, 1n, 1n, 80u, 160u, 0) dc 0
+V6 VDATA6 VSS PULSE(0, 1.5, 160u, 1n, 1n, 160u, 320u, 0) dc 0
+V7 VDATA7 VSS PULSE(0, 1.5, 320u, 1n, 1n, 320u, 640u, 0) dc 0
+V8 VDATA8 VSS PULSE(0, 1.5, 640u, 1n, 1n, 640u, 1280u, 0) dc 0
+
+*----------------------------------------------------------------
+* DUT
+*----------------------------------------------------------------
+.include gray_encoder.cir
+.include xor.cir
+X1 VDATA0 VDATA1 VDATA2 VDATA3 VDATA4 VDATA5 VDATA6 VDATA7 VOUT0 VOUT1 VOUT2 VOUT3 VOUT4 VOUT5 VOUT6 VOUT7 VDD VSS GRAY
+
+.control
+set color0=white
+set color1=black
+tran 1n 160u
+*plot V(VDATA0) V(VDATA1) V(VDATA2) V(VDATA3) V(VDATA4) V(VDATA5) V(VDATA6) V(VDATA7)
+plot V(VOUT0) 
+plot V(VOUT1) 
+plot V(VOUT2) 
+plot V(VOUT3) 
+plot V(VOUT4) 
+plot V(VOUT5) 
+plot V(VOUT6) 
+plot V(VOUT7) 
+.endc
+.end
