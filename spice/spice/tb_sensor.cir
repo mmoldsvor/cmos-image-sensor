@@ -18,12 +18,12 @@ VSS VSS 0 dc 0
 
 V1 ERASE VSS PULSE(0, 1.5, 0, 10n, 10n, 600n, 120u, 0) dc 0
 V2 EXPOSE VSS PULSE(0, 1.5, 600n, 10n, 10n, 30u, 120u, 0) dc 0
-V3 VRESET VSS dc 1.1
+V3 VRESET VSS dc 1.5
 
 *----------------------------------------------------------------
 * DUT
 *----------------------------------------------------------------
-.include pixelSensor.cir
+.include sensor.cir
 XDUT VRESET VSTORE ERASE EXPOSE VDD VSS SENSOR
 
 *----------------------------------------------------------------
@@ -35,5 +35,6 @@ set color0=white
 set color1=black
 tran 1n 60u
 plot V(VSTORE) V(EXPOSE) V(ERASE) V(XDUT.VPG)
+wrdata ../output/tb_sensor.txt V(VSTORE) V(EXPOSE) V(ERASE) V(XDUT.VPG) @m.xdut.m2[id] @m.xdut.m2[gm]
 .endc
 .end

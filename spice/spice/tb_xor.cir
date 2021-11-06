@@ -29,5 +29,6 @@ set color0=white
 set color1=black
 tran 1n 60u
 plot V(A) V(B) V(OUT)
+wrdata ../output/xor.txt V(A) V(B) V(OUT)
 .endc
 .end

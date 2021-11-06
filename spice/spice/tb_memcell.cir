@@ -34,5 +34,6 @@ set color0=white
 set color1=black
 tran 1n 60u
 plot V(VCMP_OUT) V(DATA_0) V(READ) V(XDUT.vg) V(XDUT.dmem)
+wrdata ../output/tb_memcell.txt V(VCMP_OUT) V(DATA_0) V(READ) V(XDUT.vg) V(XDUT.dmem)
 .endc
 .end

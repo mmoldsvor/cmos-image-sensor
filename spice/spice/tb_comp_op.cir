@@ -14,20 +14,37 @@
 * Sources
 *----------------------------------------------------------------
 VDD VDD VSS dc 1.5
+V1 VSTORE VSS dc 0.2 
 VSS VSS 0 dc 0
-VA A VSS PULSE(0, 1.3, 15u, 10n, 10n, 30u, 60u, 0)
+
+V2 VSTORE VCMP_OUT dc 0
+
+IPB1 VDD VBIAS dc 1u
+XMNB0 VBIAS VBIAS VSS VSS NCHCM2
 
 *----------------------------------------------------------------
 * DUT
 *----------------------------------------------------------------
-.include xor.cir
-X1 A OUT VDD VSS INVERTER
+.include comp.cir
+XDUT VCMP_OUT VSTORE VRAMP VBIAS VDD VSS COMP
+
+*----------------------------------------------------------------
+* NGSPICE control
+*----------------------------------------------------------------
 
 .control
-set color0=white
-set color1=black
-tran 1n 60u
-plot V(A) V(OUT)
-wrdata ../output/tb_inverter.txt V(A) V(OUT)
+op
+* Vds
+print v(XDUT.VDIFF1)-v(XDUT.VCURR)
+* Vgs
+print v(VSTORE)-v(XDUT.VCURR)
+
+* Vgs cm
+print v(XDUT.VDIFF1)-v(VDD)
+
+show m.xdut.m1 : vth
+show m.xdut.m2 : vth
+show m.xdut.m3 : vth
+show m.xdut.m4 : vth
 .endc
 .end
