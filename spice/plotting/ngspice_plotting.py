@@ -68,9 +68,24 @@ def plot_sensor():
     plt.show()
 
 
+def plot_comparator_dyn():
+    path = Path('tb_comp.txt')
+
+    time, ramp, store, outp, outn, clk, reset, q, qn = read_file(path)
+    
+    fig, ax = plt.subplots(nrows=5, figsize=(18, 5))
+    ax[0].plot(time, ramp, time, store)
+    ax[1].plot(time, outp)
+    ax[2].plot(time, outn)
+    ax[3].plot(time, clk)
+    ax[4].plot(time, reset, time, q)
+
+    plt.show()
+
 if __name__ == '__main__':
     #plot_sensor()
     
-    plot_comparator()
-    
+    #plot_comparator()
+    plot_comparator_dyn()
+
     #plot_counter()
