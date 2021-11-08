@@ -13,5 +13,5 @@
 *----------------------------------------------------------------
 * DUT
 *----------------------------------------------------------------
-.include pixelSensor.cir
+.include memory.cir
 XDUT READ VCMP_OUT DATA_7 DATA_6 DATA_5 DATA_4 DATA_3 DATA_2 DATA_1 DATA_0 VDD VSS MEMORY

@@ -78,14 +78,75 @@ def plot_comparator_dyn():
     ax[1].plot(time, outp)
     ax[2].plot(time, outn)
     ax[3].plot(time, clk)
-    ax[4].plot(time, reset, time, q)
+    ax[4].plot(time, reset, time, qn)
 
+    plt.show()
+
+def plot_memcell():
+    path = Path('tb_memcell.txt')
+
+    time, comp, data, io, read, vg, dmem = read_file(path)
+    fig, ax = plt.subplots(nrows=5, figsize=(18, 5))
+
+    ax[0].plot(time, read)
+    ax[0].set_title('read')
+    ax[1].plot(time, io)
+    ax[1].set_title('io')
+    ax[2].plot(time, data)
+    ax[2].set_title('data')
+    ax[3].plot(time, comp)
+    ax[3].set_title('comp')
+    ax[4].plot(time, vg, time, dmem)
+    ax[4].legend(['vg', 'dmem'])
+    plt.show()
+
+def plot_pixelmemory():
+    path = Path('tb_pixelsensor.txt')
+
+    time, vg8, dmem8, vg7, dmem7, vg6, dmem6, vg5, dmem5, vg4, dmem4, vg3, dmem3, vg2, dmem2, vg1, dmem1, \
+        store, erase, expose, convert, ramp, comp, read, do, clk = read_file(path)
+    
+    fig, ax = plt.subplots(nrows=9, figsize=(18, 5))
+    ax[0].plot(time, vg8, time, dmem8)
+    ax[0].set_title('bit-8')
+    ax[1].plot(time, vg7, time, dmem7)
+    ax[1].set_title('bit-7')
+    ax[2].plot(time, vg6, time, dmem6)
+    ax[2].set_title('bit-6')
+    ax[3].plot(time, vg5, time, dmem5)
+    ax[3].set_title('bit-5')
+    ax[4].plot(time, vg4, time, dmem4)
+    ax[4].set_title('bit-4')
+    ax[5].plot(time, vg3, time, dmem3)
+    ax[5].set_title('bit-3')
+    ax[6].plot(time, vg2, time, dmem2)
+    ax[6].set_title('bit-2')
+    ax[7].plot(time, vg1, time, dmem1)
+    ax[7].set_title('bit-1')
+    ax[8].plot(time, comp)
+    plt.show()
+
+def plot_pixelcomp():
+    path = Path('tb_pixelsensor.txt')
+
+    time, vg8, dmem8, vg7, dmem7, vg6, dmem6, vg5, dmem5, vg4, dmem4, vg3, dmem3, vg2, dmem2, vg1, dmem1, \
+        store, erase, expose, convert, ramp, comp, read, do = read_file(path)
+
+
+    fig, ax = plt.subplots(nrows=2, figsize=(18, 5))
+    ax[0].plot(time, ramp, time, comp, time, store)
+    ax[1].plot(time, comp)
+    plt.legend(['Ramp', 'Comp', 'Store'])
     plt.show()
 
 if __name__ == '__main__':
     #plot_sensor()
     
     #plot_comparator()
-    plot_comparator_dyn()
+    #plot_comparator_dyn()
 
     #plot_counter()
+
+    #plot_memcell()
+    #plot_pixelmemory()
+    plot_pixelcomp()

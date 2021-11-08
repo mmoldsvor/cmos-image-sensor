@@ -33,10 +33,6 @@
 .include ../../../ciceda/lib/SUN_TR_GF130N.spi
 .include ../../../ciceda/lib/SUN_TRIO_GF130N.spi
 
-.include gray_encoder.cir
-.include xor.cir
-.include pixelSensor.cir
-
 *----------------------------------------------------------------
 * Options
 *----------------------------------------------------------------
@@ -84,6 +80,7 @@ VERASE ERASE 0 dc 0 pulse (0 VDD TD_ERASE TRF TRF PW_ERASE PERIOD)
 VEXPOSE EXPOSE 0 dc 0 pulse (0 VDD TD_EXPOSE TRF TRF PW_EXPOSE PERIOD)
 VCONVERT CONVERT 0 dc 0 pulse (0 VDD TD_CONVERT TRF TRF PW_CONVERT PERIOD)
 VREAD READ 0 dc 0 pulse (0 VDD TD_READ TRF TRF PW_READ PERIOD)
+VCLK CLK 0 dc 0 pulse (0 VDD 500n 10n 10n 500n 1u 0)
 
 *- ADC related sources
 VREF VREF 0 DC VADC_REF
@@ -96,13 +93,14 @@ VMIN VMIN 0 DC VADC_MIN
 * BIAS
 *----------------------------------------------------------------
 * Use a current mirror transistor from the SUN_TR_GF130N library
-IPB1 0 VBN1 dc 2u
+IPB1 0 VBN1 dc 1u
 XMNB0 VBN1 VBN1 VSS VSS NCHCM2
 
 *----------------------------------------------------------------
 * DUT
 *----------------------------------------------------------------
-XDUT VBN1 VRAMP VRESET ERASE EXPOSE READ
+.include pixelSensor_dyn.cir
+XDUT CLK VBN1 VRAMP VRESET ERASE EXPOSE READ
 + DATA_7 DATA_6 DATA_5 DATA_4 DATA_3 DATA_2 DATA_1 DATA_0 VDD VSS PIXEL_SENSOR
 
 *----------------------------------------------------------------
@@ -207,6 +205,6 @@ wrdata ../output/tb_pixelSensor.txt
     + v(xdut.x3.x3.vg) v(xdut.x3.x3.dmem)
     + v(xdut.x3.x2.vg) v(xdut.x3.x2.dmem)
     + v(xdut.x3.x1.vg) v(xdut.x3.x1.dmem)
-    + V(XDUT.VSTORE) V(ERASE) V(EXPOSE) V(CONVERT) V(VRAMP) V(XDUT.VCMP_OUT) V(READ) V(DO)
+    + V(XDUT.VSTORE) V(ERASE) V(EXPOSE) V(CONVERT) V(VRAMP) V(XDUT.QN) V(READ) V(DO) V(CLK) V(XDUT.VOUTN)
 .endc
 .end

@@ -18,7 +18,7 @@ V1 VSTORE VSS dc 0.7
 VSS VSS 0 dc 0
 V2 VRAMP VSS PULSE(0, 1.5, 0, 60u, 10n, 60u, 120u, 0) dc 0
 V3 VCLK VSS PULSE(0, 1.5, 500n, 1n, 1n, 500n, 1u, 0) dc 0
-V4 VRESET VSS PULSE(0, 1.5, 25u, 1n, 1n, 60u, 60u, 0) dc 0
+V4 VRESET VSS dc 0
 
 *----------------------------------------------------------------
 * DUT
@@ -26,7 +26,8 @@ V4 VRESET VSS PULSE(0, 1.5, 25u, 1n, 1n, 60u, 60u, 0) dc 0
 .include comp_improved_dynamic.cir
 XDUT VSTORE VRAMP VCLK VOUTP VOUTN VDD VSS COMP
 
-XSR1 VOUTN VCLK VRESET Q QN VDD VSS DFRNQNX1_CV
+.include sr_latch.cir
+XSR1 VOUTN VRESET Q QN VDD VSS SR
 
 *----------------------------------------------------------------
 * NGSPICE control
