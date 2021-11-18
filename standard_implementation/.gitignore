@@ -3,3 +3,6 @@ images
 *.txt
 *.png
 *.dot
+*.svg
+*_netlist*
+image_extractor

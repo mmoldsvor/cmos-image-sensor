@@ -85,7 +85,6 @@ module PIXEL_SENSOR
    always @(posedge VBN1) begin
       if(EXPOSE) begin
         tmp = tmp - (pixel_value/255.0)*(lsb-lsb_pad);
-        //display("pixel_division: %f, target: %d", (pixel_value/255.0), pixel_value);
       end
    end
 

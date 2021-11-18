@@ -5,7 +5,7 @@
 ../gray_code/gray_encoder.sv
 ../gray_code/gray_decoder.sv
 ../pixelSensor/pixelSensor.v
-../pixelArray/pixelArray.sv
+../pixelArray/pixel_array.sv
 ../readout/mux.sv
 ../readout/sub.sv
 pixel_top.sv

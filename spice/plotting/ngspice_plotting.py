@@ -5,13 +5,13 @@ import os
 
 os.environ["PATH"] += ';C:/Program Files/MiKTeX/miktex/bin/x64/'
 
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    'font.family': 'serif',
-    'text.usetex': True,
-    'pgf.rcfonts': False,
-    'axes.unicode_minus': False
-})
+# matplotlib.use("pgf")
+# matplotlib.rcParams.update({
+#     'font.family': 'serif',
+#     'text.usetex': True,
+#     'pgf.rcfonts': False,
+#     'axes.unicode_minus': False
+# })
 
 from pathlib import Path
 
@@ -178,9 +178,9 @@ def plot_sensor_multi(name):
     plt.plot(time, test1, time, test2, time, test3)
     plt.legend(['vstore', 'erase', 'expose'])
 
-    plt.savefig(f'plots/{name}.pgf')
-    plt.clf()
-    #plt.show()
+    #plt.savefig(f'plots/{name}.pgf')
+    #plt.clf()
+    plt.show()
 
 def plot_sensor():
     plot_sensor_multi('tb_sensor')
@@ -263,7 +263,7 @@ def plot_pixelcomp():
     path = Path('tb_pixelSensor.txt')
 
     time, vg8, dmem8, vg7, dmem7, vg6, dmem6, vg5, dmem5, vg4, dmem4, vg3, dmem3, vg2, dmem2, vg1, dmem1, \
-        store, erase, expose, convert, ramp, comp, read, do = read_file(path)
+        store, erase, expose, convert, ramp, comp, read, do, ivss = read_file(path)
 
     plt.plot(time, ramp, time, comp, time, store)
     plt.legend(['ramp', 'comp', 'store'])
@@ -274,8 +274,11 @@ def plot_pixelcomp():
     plt.show()
     #plt.savefig('plots/pixelcomp.pgf')
 
+    plt.plot(time, ivss)
+    plt.show()
+
 if __name__ == '__main__':
-    plot_sensor()
+    #plot_sensor()
     
     #plot_comparator()
     #plot_comparator_dyn()
@@ -284,4 +287,4 @@ if __name__ == '__main__':
 
     #plot_memcell()
     #plot_pixelmemory()
-    #plot_pixelcomp()
+    plot_pixelcomp()

@@ -4,7 +4,7 @@
 .include sensor.cir
 X1 VRESET VSTORE ERASE EXPOSE VDD VSS SENSOR
 
-.include comp_improved.cir
+.include comp_feedback.cir
 X2 VCMP_OUT VSTORE VRAMP VBN1 VDD VSS COMP
 
 .include memory.cir

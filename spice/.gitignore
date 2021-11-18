@@ -3,3 +3,5 @@ IDEAL_PLOTS
 *.csv
 *.txt
 *.log
+*.pgf
+output

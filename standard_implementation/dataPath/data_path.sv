@@ -1,5 +1,3 @@
-`timescale 1 ns / 1 ps
-
 module data_path (input logic clk,
                   input logic reset,
                   input logic enable,
@@ -20,8 +18,9 @@ module data_path (input logic clk,
     parameter c_expose = 255;
     parameter c_convert = 255;
     parameter c_read = pixel_count;
-
-    logic[3:0] state;
+    
+    typedef enum {IDLE, ERASE, EXPOSE, CONVERT, READ} states;
+    states state;
     logic[3:0] next_state;
     logic[15:0] counter = 0;
 
@@ -37,7 +36,7 @@ module data_path (input logic clk,
 
     always_comb begin
         case (state)
-            0: begin
+            IDLE: begin
                 erase = 0;
                 expose = 0;
                 corr = 0;
@@ -48,7 +47,7 @@ module data_path (input logic clk,
                     next_state = 1;
                 end
             end
-            1: begin
+            ERASE: begin
                 erase = 1;
                 expose = 0;
                 corr = 0;
@@ -64,7 +63,7 @@ module data_path (input logic clk,
                     end
                 end
             end
-            3: begin
+            CONVERT: begin
                 erase = 0;
                 expose = 0;
                 convert = 1;
@@ -78,7 +77,7 @@ module data_path (input logic clk,
                     end
                 end
             end
-            2: begin
+            EXPOSE: begin
                 erase = 0;
                 expose = 1;
                 corr = 0;
@@ -89,7 +88,7 @@ module data_path (input logic clk,
                     next_state = 3;
                 end
             end
-            4: begin
+            READ: begin
                 erase = 0;
                 expose = 0;
                 convert = 0;
