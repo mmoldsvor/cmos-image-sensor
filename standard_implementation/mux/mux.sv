@@ -1,11 +1,14 @@
 module mux (
     input logic clk,
     input logic reset,
-    input logic[$clog2(mux_width)-1:0] select,
-    input logic[mux_width-1:0][bus_width-1:0] in,
+    input logic[2:0] select,
+    input logic[bus_width-1:0] in1,
+    input logic[bus_width-1:0] in2,
+    input logic[bus_width-1:0] in3,
+    input logic[bus_width-1:0] in4,
     output wire[bus_width-1:0] out
 );
-    parameter mux_width = 8;
+    parameter mux_width = 4;
     parameter bus_width = 8;
 
     logic[bus_width] intermediate_out;

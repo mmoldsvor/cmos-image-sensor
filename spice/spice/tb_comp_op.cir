@@ -8,24 +8,24 @@
 *----------------------------------------------------------------
 * Options
 *----------------------------------------------------------------
-.option TNOM=27 GMIN=1e-15 reltol=1e-6 abstol=1e-6
+.option TNOM=27 GMIN=1e-15 reltol=1e-8 abstol=1e-10
 
 *----------------------------------------------------------------
 * Sources
 *----------------------------------------------------------------
 VDD VDD VSS dc 1.5
-V1 VSTORE VSS dc 0.2 
+V1 VSTORE VSS dc 0.7
 VSS VSS 0 dc 0
 
-V2 VSTORE VCMP_OUT dc 0
+V2 VSTORE VRAMP dc 0
 
-IPB1 VDD VBIAS dc 1u
+IPB1 VDD VBIAS dc 2.1u
 XMNB0 VBIAS VBIAS VSS VSS NCHCM2
 
 *----------------------------------------------------------------
 * DUT
 *----------------------------------------------------------------
-.include comp.cir
+.include comp_test.cir
 XDUT VCMP_OUT VSTORE VRAMP VBIAS VDD VSS COMP
 
 *----------------------------------------------------------------
@@ -39,8 +39,14 @@ print v(XDUT.VDIFF1)-v(XDUT.VCURR)
 * Vgs
 print v(VSTORE)-v(XDUT.VCURR)
 
+* Vds
+print v(XDUT.VDIFF2)-v(XDUT.VCURR)
+* Vgs
+print v(VRAMP)-v(XDUT.VCURR)
+
 * Vgs cm
 print v(XDUT.VDIFF1)-v(VDD)
+print v(XDUT.VDIFF2)-v(VDD)
 
 show m.xdut.m1 : vth
 show m.xdut.m2 : vth

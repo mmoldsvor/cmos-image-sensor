@@ -6,5 +6,5 @@ M1 VRESET ERASE VSTORE VSS nmos w=0.5u l=0.5u
 
 M2 VSTORE EXPOSE VPG VSS nmos w=0.5u l=0.5u
 
-Rphoo VPG VSS 1G
+Rphoo VPG VSS 1000Meg
 .ENDS

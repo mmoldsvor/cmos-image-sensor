@@ -1,7 +1,7 @@
 # read design
-read_verilog -sv decoder.sv
+read_verilog -sv mux.sv
 
-hierarchy -top decoder
+hierarchy -top mux
 
 # the high-level stuff
 proc; fsm; opt; memory; opt
@@ -21,9 +21,9 @@ dfflibmap  -liberty ../../../ciceda/lib/SUN_TR_GF130N.lib
 abc -liberty ../../../ciceda/lib/SUN_TR_GF130N.lib
 
 
-write_verilog decoder_netlist.v
+write_verilog mux_netlist.v
 
 read_verilog -sv ../../../ciceda/lib/SUN_TR_GF130N.v
-show -format dot -prefix decoder -colors 1 -width -stretch
+show -format dot -prefix mux -colors 1 -width -stretch
 
 clean

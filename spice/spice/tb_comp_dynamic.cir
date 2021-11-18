@@ -38,6 +38,6 @@ set color0=white
 set color1=black
 tran 1n 60u
 plot V(VSTORE) V(VRAMP) V(VOUTP) V(VOUTN) V(VCLK)
-wrdata ../output/tb_comp.txt V(VSTORE) V(VRAMP) V(VOUTP) V(VOUTN) V(VCLK) V(VRESET) V(Q) V(QN)
+wrdata ../output/tb_comp_dynamic.txt V(VSTORE) V(VRAMP) V(VOUTP) V(VOUTN) V(VCLK) V(VRESET) V(Q) V(QN)
 .endc
 .end

@@ -38,14 +38,18 @@ module PIXEL_SENSOR
    input logic      VBN1,
    input logic      RAMP,
    input logic      RESET,
+   input logic      CORR,
    input logic      ERASE,
    input logic      EXPOSE,
    input logic      READ,
+   input logic      CDS,
    inout [7:0]      DATA,
-   input logic[7:0]      pixel_value
+   inout [7:0]      DATA_CORR,
+   input logic[7:0] pixel_value
    );
 
    real             v_erase = 1.2;
+   parameter real   padding = 0.1;
    real             lsb = v_erase/255;
    parameter real   dv_pixel = 0.5;
 
@@ -53,15 +57,23 @@ module PIXEL_SENSOR
    logic            cmp;
    real             adc;
 
+   // Values related to correlated double sampling
+   parameter real   noise_precision = 1000;
+   real             offset = ($itor($urandom_range(noise_precision))-(noise_precision/2))*(2*padding)/noise_precision;
+   real             lsb_pad = (2*padding)/255;
+
    logic [7:0]      p_data;
+   logic [7:0]      p_data_corr;
+
 
    //----------------------------------------------------------------
    // ERASE
    //----------------------------------------------------------------
    // Reset the pixel value on pixRst
    always @(ERASE) begin
-      tmp = v_erase;
+      tmp = v_erase - padding + offset;
       p_data = 0;
+      p_data_corr = 0;
       cmp  = 0;
       adc = 0;
    end
@@ -72,7 +84,7 @@ module PIXEL_SENSOR
    // Use bias to provide a clock for integration when exposing
    always @(posedge VBN1) begin
       if(EXPOSE) begin
-        tmp = tmp - (pixel_value/255.0)*lsb;
+        tmp = tmp - (pixel_value/255.0)*(lsb-lsb_pad);
         //display("pixel_division: %f, target: %d", (pixel_value/255.0), pixel_value);
       end
    end
@@ -88,12 +100,24 @@ module PIXEL_SENSOR
         cmp <= 1;
    end
 
+   always @(negedge CORR) begin
+      cmp  = 0;
+      adc = 0;
+   end
+
    //----------------------------------------------------------------
    // Memory latch
    //----------------------------------------------------------------
    always_comb  begin
       if(!cmp) begin
-         p_data = DATA;
+         if (CORR) begin
+             p_data_corr = DATA_CORR;
+         end else begin
+             p_data = DATA;
+            if (!CDS) begin
+                p_data_corr = DATA_CORR;
+            end
+         end
       end
    end
 
@@ -102,5 +126,6 @@ module PIXEL_SENSOR
    //----------------------------------------------------------------
    // Assign data to bus when pixRead = 0
    assign DATA = READ ? p_data : 8'bZ;
+   assign DATA_CORR = READ ? p_data_corr : 8'bZ;
 
 endmodule // re_control

@@ -15,16 +15,16 @@
 *----------------------------------------------------------------
 VDD VDD VSS dc 1.5
 VSS VSS 0 dc 0
-V1 IO VSS PULSE(0, 1.5, 0, 10n, 10n, 7.5u, 30u, 0) dc 0
-V2 READ VSS PULSE(0, 1.5, 15u, 10n, 10n, 10u, 30u, 0) dc 0
-V3 VCMP_OUT VSS PULSE(0, 1.5, 40u, 10n, 10n, 2.5u, 60u, 0) dc 0
+VCOMP COMP VSS dc 0 PULSE(0, 1.5, 0, 10n, 10n, 30u, 60u, 0)
+VIO IO VSS dc 0 PULSE(0, 1.5, 0, 10n, 10n, 31u, 60u, 0)
+VREAD READ VSS dc 0 PULSE(0, 1.5, 40u, 10n, 10n, 5u, 60u)
 
 *----------------------------------------------------------------
 * DUT
 *----------------------------------------------------------------
 .include memory.cir
-M1 DATA_0 IO VDD VDD pmos w=0.5u l=0.5u
-XDUT VCMP_OUT DATA_0 READ VSS MEMCELL
+M1 DATA IO VDD VDD pmos w=0.5u l=0.5u
+XDUT COMP DATA READ VSS MEMCELL
 
 *----------------------------------------------------------------
 * NGSPICE control
@@ -34,7 +34,6 @@ XDUT VCMP_OUT DATA_0 READ VSS MEMCELL
 set color0=white
 set color1=black
 tran 1n 60u
-plot V(VCMP_OUT) V(DATA_0) V(READ) V(XDUT.vg) V(XDUT.dmem)
-wrdata ../output/tb_memcell.txt V(VCMP_OUT) V(DATA_0), V(IO) V(READ) V(XDUT.vg) V(XDUT.dmem)
+wrdata ../output/tb_memcell_high.txt V(COMP) V(IO) V(DATA) V(READ) V(XDUT.VG) V(XDUT.DMEM) I(v.XDUT.V1)
 .endc
 .end
