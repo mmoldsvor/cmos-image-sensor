@@ -1,0 +1,15 @@
+.SUBCKT NOR A B OUT VDD VSS
+
+M1 SER A VDD VDD pmos w=0.5u l=0.5u
+M2 OUT B SER VDD pmos w=0.5u l=0.5u
+M3 OUT A VSS VSS nmos w=0.5u l=0.5u
+M4 OUT B VSS VSS nmos w=0.5u l=0.5u
+
+.ENDS
+
+.SUBCKT SR S R Q QN VDD VSS
+
+X1 R QN Q VDD VSS NOR
+X2 Q S QN VDD VSS NOR
+
+.ENDS

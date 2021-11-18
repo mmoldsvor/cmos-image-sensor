@@ -1,0 +1,8 @@
+images
+*.tim
+*.txt
+*.png
+*.dot
+*.svg
+*_netlist*
+image_extractor

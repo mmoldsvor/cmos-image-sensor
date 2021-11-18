@@ -1,0 +1,22 @@
+.SUBCKT COMP VCMP_OUT VSTORE VRAMP VBIAS VDD VSS
+
+* Current mirror
+M3 VDIFF1 VDIFF1 VDD VDD pmos w=0.5u l=0.5u
+M4 VDIFF2 VDIFF1 VDD VDD pmos w=0.5u l=0.5u
+
+* Differential pair
+M1 VDIFF1 VSTORE VCURR VSS nmos w=0.5u l=0.15u
+M2 VDIFF2 VRAMP VCURR VSS nmos w=0.5u l=0.15u
+
+* Current source
+XM1 VCURR VBIAS VSS VSS NCHCM2
+
+* Source follower stage 1
+XM2 VINV_OUT VBIAS VSS VSS NCHCM2
+M5 VINV_OUT VDIFF2 VDD VDD pmos W=0.5u L=0.5u
+
+* Inverter stage 2
+M6 VCMP_OUT VINV_OUT VSS VSS nmos W=0.5u L=0.15u
+M7 VCMP_OUT VINV_OUT VDD VDD pmos W={0.5u*2.6} L=0.15u
+
+.ENDS

@@ -1,0 +1,7 @@
+IDEAL_PLOTS
+*.out
+*.csv
+*.txt
+*.log
+*.pgf
+output

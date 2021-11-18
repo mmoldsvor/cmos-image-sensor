@@ -1,0 +1,33 @@
+.SUBCKT COMP VCMP_OUT VSTORE VRAMP VBN1 VDD VSS
+* Part I
+* Transistor middle left
+M3 VDIFF1 VSTORE VCURR VSS nmos W=0.5u L=0.15u
+
+* Transistor bottom 
+M4 VCURR VBN1 VSS VSS nmos W=0.5u L=0.15u
+
+* Transistor top left
+M5 VDIFF2 VDIFF1 VDD VDD pmos W={3.86*0.5u} L=0.15u
+
+* Transistor top rigth
+M6 VDIFF1 VDIFF1 VDD VDD pmos W={3.86*0.5u} L=0.15u
+
+* Transistor middle right
+M7 VDIFF2 VRAMP VCURR VSS nmos W=0.5u L=0.15u
+
+*//////////////////////////////
+* Part II (inverter pair)
+
+*pmos topp left
+M8 VINV_OUT VDIFF2 VDD VDD pmos W={3.86*0.5u} L=0.15u
+
+* Transistor bottom left
+M9 VINV_OUT VBN1 VSS VSS nmos W=0.5u L=0.15u
+
+* Transistor top right
+M10 VCMP_OUT VINV_OUT VDD VDD pmos W={3.86*0.5u} L=0.15u
+
+* Transistor bottom right
+M11 VCMP_OUT VINV_OUT VSS VSS nmos W=0.5u L=0.15u
+
+.ENDS

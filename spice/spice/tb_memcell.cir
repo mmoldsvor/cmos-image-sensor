@@ -1,0 +1,39 @@
+*----------------------------------------------------------------
+* Include
+*----------------------------------------------------------------
+.include ../../../ciceda/models/ptm_130_ngspice.spi
+.include ../../../ciceda/lib/SUN_TR_GF130N.spi
+.include ../../../ciceda/lib/SUN_TRIO_GF130N.spi
+
+*----------------------------------------------------------------
+* Options
+*----------------------------------------------------------------
+.option TNOM=27 GMIN=1e-15 reltol=1e-6 abstol=1e-6
+
+*----------------------------------------------------------------
+* Sources
+*----------------------------------------------------------------
+VDD VDD VSS dc 1.5
+VSS VSS 0 dc 0
+VCOMP COMP VSS dc 0 PULSE(0, 1.5, 0, 10n, 10n, 30u, 60u, 0)
+VIO IO VSS dc 0 PULSE(0, 1.5, 0, 10n, 10n, 31u, 60u, 0)
+VREAD READ VSS dc 0 PULSE(0, 1.5, 40u, 10n, 10n, 5u, 60u)
+
+*----------------------------------------------------------------
+* DUT
+*----------------------------------------------------------------
+.include memory.cir
+M1 DATA IO VDD VDD pmos w=0.5u l=0.5u
+XDUT COMP DATA READ VSS MEMCELL
+
+*----------------------------------------------------------------
+* NGSPICE control
+*----------------------------------------------------------------
+
+.control
+set color0=white
+set color1=black
+tran 1n 60u
+wrdata ../output/tb_memcell_high.txt V(COMP) V(IO) V(DATA) V(READ) V(XDUT.VG) V(XDUT.DMEM) I(v.XDUT.V1)
+.endc
+.end
